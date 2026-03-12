@@ -24,6 +24,10 @@ function(benchmark_set_output_prefix prefix)
     endforeach()
 endfunction()
 
+if(APPLE)
+    add_library(benchgen_hash_memory_shim STATIC hash_memory_shim.cc)
+endif()
+
 add_subdirectory(util)
 add_subdirectory(tpcds)
 add_subdirectory(tpch)
@@ -37,6 +41,9 @@ target_sources(benchgen PRIVATE
     $<TARGET_OBJECTS:ssb_gen_obj>
 )
 target_link_libraries(benchgen PUBLIC ${BENCHGEN_ARROW_TARGET})
+if(APPLE)
+    target_link_libraries(benchgen PUBLIC benchgen_hash_memory_shim)
+endif()
 target_include_directories(benchgen
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>

@@ -96,6 +96,9 @@ add_executable(tpcds_gen_idx
 )
 target_compile_definitions(tpcds_gen_idx PRIVATE
     TPCDS_RESOURCE_DISTRIBUTION_DIR=\"${_tpcds_distribution_dir}\")
+if(APPLE)
+    target_link_libraries(tpcds_gen_idx PRIVATE benchgen_hash_memory_shim)
+endif()
 
 file(GLOB TPCDS_DISTRIBUTION_DST_FILES "${_tpcds_distribution_dir}/*.dst")
 set(TPCDS_GENERATED_IDX "${BENCHGEN_GENERATED_DIR}/tpcds.idx")
